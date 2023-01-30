@@ -19,7 +19,7 @@ class WorldClockApp(tk.Tk):
         map_frame = mapv.MapFrame(self, COL_THEME)
         map_frame.pack(fill = tk.BOTH, expand = 1, pady = 0)
 
-        clocks_frame = tk.Frame(self, height = 350, bg = COL_THEME["bg_col"])
+        clocks_frame = tk.Frame(self, height = 275, bg = COL_THEME["bg_col"])
         clocks_frame.pack(fill = tk.BOTH, expand = 1)
 
         self.mainloop()
