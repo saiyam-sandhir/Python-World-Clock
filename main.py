@@ -1,5 +1,6 @@
 import tkinter as tk
 import configparser
+import map_viewer as mapv
 
 class WorldClockApp(tk.Tk):
     def __init__(self):
@@ -15,7 +16,7 @@ class WorldClockApp(tk.Tk):
         self.geometry("700x700")
         self["background"] = COL_THEME["bg_col"]
 
-        map_frame = tk.Frame(self, height = 350, bg = COL_THEME["bg_col"])
+        map_frame = mapv.MapFrame(self, COL_THEME)
         map_frame.pack(fill = tk.BOTH, expand = 1, pady = 0)
 
         clocks_frame = tk.Frame(self, height = 350, bg = COL_THEME["bg_col"])
