@@ -10,7 +10,7 @@ class MapFrame(tk.Frame):
         self.map_widget.place(relx = 0.5, rely = 0.5, relheight = 0.8, relwidth = 0.93, anchor = tk.CENTER)
 
         #setting default map position
-        self.map_widget.set_position(28.6128541, 77.2310539) #New Delhi, India
+        self.map_widget.set_position(28.613939, 77.209023) #New Delhi, India
         self.map_widget.set_zoom(16)
 
         self.servers = {
