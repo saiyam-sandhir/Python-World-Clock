@@ -3,6 +3,7 @@ import tkinter as tk
 from datetime import datetime
 import pytz
 from PIL import Image
+import csv
 
 class Time(tk.Label):
     def __init__(self, master, time_zone: str, COL_THEME):
@@ -10,10 +11,18 @@ class Time(tk.Label):
         
 
 class TimeBar(ctk.CTkFrame):
-    def __init__(self, master, time_zone: str, COL_THEME):
+    def __init__(self, master, timebar_details: dict, COL_THEME):
+        ##a function that checks if the given details match with any row in the csv file
+        ##If yes:
+        ##      return Error
+        ##else:
+        ##      register the timebar
+
+        self.register(timebar_details)
+
         super().__init__(master, height = 50, corner_radius = 20, bg_color = COL_THEME["bg_col"], fg_color = COL_THEME["fg_col"])
 
-        self.timezone = time_zone
+        self.timezone = timebar_details["timezone"]
 
         time_Label = Time(self, self.timezone, COL_THEME)
         time_Label.place(x = 10, y = 25, anchor = tk.W)
@@ -29,9 +38,8 @@ class TimeBar(ctk.CTkFrame):
         delete_Button = ctk.CTkButton(self, image = deleteimg_image, text = "", corner_radius = 10, height = 20, width = 20)
         delete_Button.place(x = 590, y = 25, anchor = tk.E)
 
-        self.register()
-
-    def register(self):
-        with open(".\\registered_timezones.txt", "a+") as reg_file:
-            reg_file.write(f"{self.timezone} \n")
+    def register(self, timebar_details: dict):
+        with open(".\\registered_timebars.csv", "a+", newline="") as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerow(list(timebar_details.values()))
 
