@@ -1,7 +1,7 @@
 import tkinter as tk
 import configparser
 import map_viewer as mapv
-from clock import TimeBar
+import clocks_viewer as clocksv
 
 class WorldClockApp(tk.Tk):
     def __init__(self):
@@ -20,7 +20,7 @@ class WorldClockApp(tk.Tk):
         map_frame = mapv.MapFrame(self, COL_THEME)
         map_frame.pack(fill = tk.BOTH, expand = 1, pady = 0)
 
-        clocks_frame = tk.Frame(self, height = 275, bg = COL_THEME["bg_col"])
+        clocks_frame = clocksv.ClocksFrame(self, COL_THEME)
         clocks_frame.pack(fill = tk.BOTH, expand = 1)
 
         ##A function that checks if csv exits or not
