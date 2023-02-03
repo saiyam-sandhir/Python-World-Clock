@@ -2,9 +2,11 @@ import tkinter as tk
 import customtkinter as ctk
 import os
 import pytz
+from geopy.geocoders import Nominatim
+import clock
 
 class ClockAdder(tk.Toplevel):
-    def __init__(self, master, COL_THEME):
+    def __init__(self, master, parent, COL_THEME):
         super().__init__(master)
         self.title("Add a Timebar")
         self.iconbitmap(".\\images\\icon.ico")
@@ -23,11 +25,11 @@ class ClockAdder(tk.Toplevel):
         timezones_Label = tk.Label(tabview.tab("Timezone"), text = "Timezones:", bg = COL_THEME["fg_col"], fg = COL_THEME["txt_col"], font = ("Arial", 10, "bold"))
         timezones_Label.place(relx = 0.34, rely = 0.17, anchor = tk.E)
         
-        timezones_OptionMenu = ctk.CTkOptionMenu(tabview.tab("Timezone"), values = pytz.common_timezones, width = 250, fg_color = COL_THEME["bg_col"], button_color = "#404258", button_hover_color = "#0F0E0E", dropdown_fg_color = COL_THEME["bg_col"], text_color = COL_THEME["txt_col"], dropdown_text_color = COL_THEME["txt_col"], font = ("Arial", 15), corner_radius = 10, dynamic_resizing = False)
-        timezones_OptionMenu.place(relx = 0.5, rely = 0.3, anchor = tk.CENTER)
-        timezones_OptionMenu.set("Select Timezone")
+        self.timezones_OptionMenu = ctk.CTkOptionMenu(tabview.tab("Timezone"), values = pytz.common_timezones, width = 250, fg_color = COL_THEME["bg_col"], button_color = "#404258", button_hover_color = "#0F0E0E", dropdown_fg_color = COL_THEME["bg_col"], text_color = COL_THEME["txt_col"], dropdown_text_color = COL_THEME["txt_col"], font = ("Arial", 15), corner_radius = 10, dynamic_resizing = False)
+        self.timezones_OptionMenu.place(relx = 0.5, rely = 0.3, anchor = tk.CENTER)
+        self.timezones_OptionMenu.set("Select Timezone")
 
-        timezones_button = ctk.CTkButton(tabview.tab("Timezone"), text = "OK", font = ("Arial", 20, "bold"), text_color = COL_THEME["txt_col"], fg_color = COL_THEME["bg_col"], corner_radius = 10)
+        timezones_button = ctk.CTkButton(tabview.tab("Timezone"), text = "OK", font = ("Arial", 20, "bold"), text_color = COL_THEME["txt_col"], fg_color = COL_THEME["bg_col"], corner_radius = 10, command = lambda: self.timebar_via_timezone(parent, COL_THEME))
         timezones_button.place(relx = 0.5, rely = 0.8, anchor = tk.CENTER)
 
         #----------Coordinates Tab----------#
@@ -45,13 +47,47 @@ class ClockAdder(tk.Toplevel):
         coordinates_latitude_Entry.place(relx = 1, rely = 0.3, anchor = tk.E)   
 
         coordinates_button = ctk.CTkButton(tabview.tab("Coordinates"), text = "OK", font = ("Arial", 20, "bold"), text_color = COL_THEME["txt_col"], fg_color = COL_THEME["bg_col"], corner_radius = 10)
-        coordinates_button.place(relx = 0.5, rely = 0.8, anchor = tk.CENTER) 
+        coordinates_button.place(relx = 0.5, rely = 0.8, anchor = tk.CENTER)
+
+    def timebar_via_timezone(self, master, COL_THEME):
+        if self.timezones_OptionMenu.get() != "Select Timezone":
+            timezone = self.timezones_OptionMenu.get()
+            num_of_underscores = 0
+            for i in timezone:
+                if i == "_":
+                    num_of_underscores += 1
+            geolocator = Nominatim(user_agent = "geoapiExercises")
+            loc = timezone.replace("_", " ", num_of_underscores)
+            loc = loc[loc.find("/") + 1:]
+
+            try:
+                loc = geolocator.geocode(timezone)
+                lat = loc.latitude
+                long_ = loc.longitude
+                        
+                timebar_details = {
+                    "timezone": timezone,
+                    "lat": lat,
+                    "long": long_
+                }
+
+                #clock.TimeBar(master, timebar_details, COL_THEME)
+                #A placer function that places the timebar
+
+            except AttributeError:
+                tk.messagebox.showerror("Software's Error", f"Error: 'Python World Clock' is unable to detect the coordinates for '{timezone}'.\n\nRemedy: Try creating timebar using coordinates instead for '{timezone}'.")
+
+        else:
+            tk.messagebox.showerror("User's Error", "Error: Tried creating a timebar without selecting a timezone.\n\nRemedy: Select a timezone or optionally any valid coordinates")
+
+    def timebar_via_coordinates(self):
+        pass 
 
 class ClocksFrame(tk.Frame):
     def __init__(self, master, COL_THEME):
         super().__init__(master, height = 275, bg = COL_THEME["bg_col"])
 
-        self.add_clock_button = ctk.CTkButton(self, text = "➕", font = ("Arial", 20, "bold"), width = 40, height = 40, corner_radius = 10, fg_color = COL_THEME["fg_col"], text_color = COL_THEME["txt_col"], command = lambda: ClockAdder(master, COL_THEME))
+        self.add_clock_button = ctk.CTkButton(self, text = "➕", font = ("Arial", 20, "bold"), width = 40, height = 40, corner_radius = 10, fg_color = COL_THEME["fg_col"], text_color = COL_THEME["txt_col"], command = lambda: ClockAdder(master, self, COL_THEME))
         self.add_clock_button.place(relx = 0.965, rely = 0.08, anchor = tk.E)
 
         if os.path.exists(".\\registered_timebars.csv"):
