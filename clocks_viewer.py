@@ -77,8 +77,7 @@ class ClockAdder(tk.Toplevel):
 
                 self.destroy()
 
-                #clock.TimeBar(self.parent, timebar_details, COL_THEME)
-                #A placer function that places the timebar
+                clock.TimeBar(self.parent, timebar_details, COL_THEME).append()
 
             except AttributeError:
                 tk.messagebox.showerror("Software's Error", f"Error: 'Python World Clock' is unable to detect the coordinates for '{timezone}'.\n\nRemedy: Try creating timebar using coordinates instead for '{timezone}'.")
@@ -102,8 +101,7 @@ class ClockAdder(tk.Toplevel):
 
             self.destroy()
 
-            #clock.TimeBar(self.parent, timebar_details, COL_THEME)
-            #A placer function that places the timebar
+            clock.TimeBar(self.parent, timebar_details, COL_THEME).append()
 
         except ValueError:
             tk.messagebox.showerror("User's Error", "Error: Entered invalid input in the coordinates entry boxes.\n\nRemedy: Enter valid coordinate values(eg: 28.613939).")

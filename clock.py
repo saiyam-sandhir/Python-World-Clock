@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 from PIL import Image
 import csv
+import pandas as pd
 
 class Time(tk.Label):
     def __init__(self, master, time_zone: str, COL_THEME):
@@ -37,6 +38,12 @@ class TimeBar(ctk.CTkFrame):
         deleteimg_image = ctk.CTkImage(light_image = Image.open(".\\images\\delete.png"), dark_image = Image.open("C:\\Users\\pc\\Desktop\\Python-World-Clock\\images\\delete.png"), size = (20, 20))
         delete_Button = ctk.CTkButton(self, image = deleteimg_image, text = "", corner_radius = 10, height = 20, width = 20)
         delete_Button.place(x = 590, y = 25, anchor = tk.E)
+
+    def append(self):
+        timebars_df = pd.read_csv(".\\registered_timebars.csv")
+        num_rows = len(timebars_df) - 1
+
+        self.place(relx = 0.5, rely = 0.47 + 0.2 * num_rows, width = 600, anchor = tk.CENTER)
 
     def register(self, timebar_details: dict):
         with open(".\\registered_timebars.csv", "a+", newline="") as csvfile:
