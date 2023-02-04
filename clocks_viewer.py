@@ -75,6 +75,8 @@ class ClockAdder(tk.Toplevel):
                     "long": long_
                 }
 
+                self.destroy()
+
                 #clock.TimeBar(self.parent, timebar_details, COL_THEME)
                 #A placer function that places the timebar
 
@@ -98,6 +100,8 @@ class ClockAdder(tk.Toplevel):
                 "long": long_
             }
 
+            self.destroy()
+
             #clock.TimeBar(self.parent, timebar_details, COL_THEME)
             #A placer function that places the timebar
 
@@ -113,11 +117,15 @@ class ClocksFrame(tk.Frame):
         self.add_clock_button.place(relx = 0.965, rely = 0.08, anchor = tk.E)
 
         if os.path.exists(".\\registered_timebars.csv"):
+            #if registered_timebar.csv file exits
             if os.stat(".\\registered_timebars.csv").st_size == 0:
-                print("empty")
+                #if that csv file exists and is empty
+                ClockAdder(master, self, COL_THEME)
 
             else:
+                #if that csv file exists and is not empty
                 print("not empty")
 
         else:
-            print("does not exist")
+            #if that csv file does not exist
+            ClockAdder(master, self, COL_THEME)
