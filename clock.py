@@ -5,6 +5,7 @@ import pytz
 from PIL import Image
 import csv
 import pandas as pd
+import os
 
 class Time(tk.Label):
     def __init__(self, master, time_zone: str, COL_THEME):
@@ -24,6 +25,7 @@ class TimeBar(ctk.CTkFrame):
         super().__init__(master, height = 50, corner_radius = 20, bg_color = COL_THEME["bg_col"], fg_color = COL_THEME["fg_col"])
 
         self.timezone = timebar_details["timezone"]
+        self.details = timebar_details
 
         time_Label = Time(self, self.timezone, COL_THEME)
         time_Label.place(x = 10, y = 25, anchor = tk.W)
@@ -41,9 +43,24 @@ class TimeBar(ctk.CTkFrame):
 
     def append(self):
         timebars_df = pd.read_csv(".\\registered_timebars.csv")
-        num_rows = len(timebars_df) - 1
+        if len(timebars_df) < 4:
+            #if less than 4 time bars are created
+            num_rows = len(timebars_df) - 1
+            self.place(relx = 0.5, rely = 0.47 + 0.2 * num_rows, width = 600, anchor = tk.CENTER)
+        
+        else:
+            #if 4 or more timebars are created
+            csvfile = open(".\\registered_timebars.csv", "r")
+            file_contents = csvfile.read()
+            csvfile.close()
+            os.remove(".\\registered_timebars.csv")
+            with open(".\\registered_timebars.csv", "w") as csvfile:
+                substring = self.details["timezone"]
+                last_line_index = file_contents.find(substring)
+                csvfile.write(file_contents[: last_line_index])
 
-        self.place(relx = 0.5, rely = 0.47 + 0.2 * num_rows, width = 600, anchor = tk.CENTER)
+            tk.messagebox.showerror("Software's Error", "Error: Cannot add more than 4 timebars in the current version of 'Python World Clock'.\n\nRemedy: Try deleting few previously created timebars, then add new ones.")
+            self.destroy()
 
     def register(self, timebar_details: dict):
         with open(".\\registered_timebars.csv", "a+", newline="") as csvfile:
