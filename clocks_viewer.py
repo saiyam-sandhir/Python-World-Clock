@@ -4,6 +4,7 @@ import os
 import pytz
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
+import pandas as pd
 import clock
 
 class ClockAdder(tk.Toplevel):
@@ -121,9 +122,28 @@ class ClocksFrame(tk.Frame):
                 ClockAdder(master, self, COL_THEME)
 
             else:
-                #if that csv file exists and is not empty
-                print("not empty")
+                self.updateClocksFrame(None, COL_THEME)
 
         else:
             #if that csv file does not exist
             ClockAdder(master, self, COL_THEME)
+
+    def updateClocksFrame(self, deleted_timebar_details, COL_THEME):
+        df = pd.read_csv(".\\registered_timebars.csv", header = None)
+
+        if deleted_timebar_details != None:
+            for i in self.winfo_children()[1:]:
+                i.destroy()
+
+            deleted_timebar_index = df.index[df.apply(tuple, axis=1) == tuple(deleted_timebar_details)].tolist()
+            df = df.drop(deleted_timebar_index)
+
+        with open(".\\registered_timebars.csv", "w") as csvfile:
+            pass
+
+        for index, row in df.iterrows():
+            keys = ["timezone", "lat", "long"]
+            values = row.tolist()
+            timebar_details = dict(zip(keys, values))
+
+            clock.TimeBar(self, timebar_details, COL_THEME).append()

@@ -1,9 +1,10 @@
 import tkinter as tk
+from tkinter import tix
 import configparser
 import map_viewer as mapv
 import clocks_viewer as clocksv
 
-class WorldClockApp(tk.Tk):
+class WorldClockApp(tix.Tk):
     def __init__(self):
         super().__init__()
 
@@ -22,13 +23,6 @@ class WorldClockApp(tk.Tk):
 
         clocks_frame = clocksv.ClocksFrame(self, COL_THEME)
         clocks_frame.pack(fill = tk.BOTH, expand = 1)
-
-        ##A function that checks if csv exits or not
-        ##if yes and not empty:
-        ##      continue
-        ##else:
-        ##      create a toplevel window that takes details from the user about the local time zone or his/her coordinates
-        ##      using those details create a timebar with its delete button removed/disabled
         
         self.mainloop()
 
