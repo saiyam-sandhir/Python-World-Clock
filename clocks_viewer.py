@@ -8,12 +8,14 @@ import pandas as pd
 import clock
 
 class ClockAdder(tk.Toplevel):
-    def __init__(self, master, parent, COL_THEME):
+    def __init__(self, master, parent, COL_THEME, map_widget):
         super().__init__(master)
         self.title("Add a Timebar")
         self.iconbitmap(".\\images\\icon.ico")
         self.resizable(False, False)
         self.config(background = COL_THEME["bg_col"], padx = 20, pady = 20)
+
+        self.map_widget = map_widget
 
         self.parent = parent
 
@@ -78,7 +80,9 @@ class ClockAdder(tk.Toplevel):
 
                 self.destroy()
 
-                clock.TimeBar(self.parent, timebar_details, COL_THEME).append()
+                timebar = clock.TimeBar(self.parent, timebar_details, COL_THEME, self.map_widget)
+                timebar.append()
+                timebar.mark()
 
             except AttributeError:
                 tk.messagebox.showerror("Software's Error", f"Error: 'Python World Clock' is unable to detect the coordinates for '{timezone}'.\n\nRemedy: Try creating timebar using coordinates instead for '{timezone}'.")
@@ -102,37 +106,41 @@ class ClockAdder(tk.Toplevel):
 
             self.destroy()
 
-            clock.TimeBar(self.parent, timebar_details, COL_THEME).append()
+            timebar = clock.TimeBar(self.parent, timebar_details, COL_THEME, self.map_widget)
+            timebar.append()
+            timebar.mark()
 
         except ValueError:
             tk.messagebox.showerror("User's Error", "Error: Entered invalid input in the coordinates entry boxes.\n\nRemedy: Enter valid coordinate values(eg: 28.613939).")
 
 
 class ClocksFrame(tk.Frame):
-    def __init__(self, master, COL_THEME):
+    def __init__(self, master, COL_THEME, map_widget):
         super().__init__(master, height = 275, bg = COL_THEME["bg_col"])
 
-        self.add_clock_button = ctk.CTkButton(self, text = "➕", font = ("Arial", 20, "bold"), width = 40, height = 40, corner_radius = 10, fg_color = COL_THEME["fg_col"], text_color = COL_THEME["txt_col"], command = lambda: ClockAdder(master, self, COL_THEME))
+        self.add_clock_button = ctk.CTkButton(self, text = "➕", font = ("Arial", 20, "bold"), width = 40, height = 40, corner_radius = 10, fg_color = COL_THEME["fg_col"], text_color = COL_THEME["txt_col"], command = lambda: ClockAdder(master, self, COL_THEME, map_widget))
         self.add_clock_button.place(relx = 0.965, rely = 0.08, anchor = tk.E)
 
         if os.path.exists(".\\registered_timebars.csv"):
             #if registered_timebar.csv file exits
             if os.stat(".\\registered_timebars.csv").st_size == 0:
                 #if that csv file exists and is empty
-                ClockAdder(master, self, COL_THEME)
+                ClockAdder(master, self, COL_THEME, map_widget)
 
             else:
-                self.updateClocksFrame(None, COL_THEME)
+                self.updateClocksFrame(None, COL_THEME, map_widget)
 
         else:
             #if that csv file does not exist
-            ClockAdder(master, self, COL_THEME)
+            ClockAdder(master, self, COL_THEME, map_widget)
 
-    def updateClocksFrame(self, deleted_timebar_details, COL_THEME):
+    def updateClocksFrame(self, deleted_timebar_details, COL_THEME, map_widget):
         df = pd.read_csv(".\\registered_timebars.csv", header = None)
 
         if deleted_timebar_details != None:
             for i in self.winfo_children()[1:]:
+                if type(i) == clock.TimeBar:
+                    i.marker.delete()
                 i.destroy()
 
             deleted_timebar_index = df.index[df.apply(tuple, axis=1) == tuple(deleted_timebar_details)].tolist()
@@ -146,4 +154,6 @@ class ClocksFrame(tk.Frame):
             values = row.tolist()
             timebar_details = dict(zip(keys, values))
 
-            clock.TimeBar(self, timebar_details, COL_THEME).append()
+            timebar = clock.TimeBar(self, timebar_details, COL_THEME, map_widget)
+            timebar.append()
+            timebar.mark()

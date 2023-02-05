@@ -6,6 +6,7 @@ import pytz
 from PIL import Image
 import csv
 import pandas as pd
+import random
 import os
 
 class Time(tk.Label):
@@ -14,13 +15,14 @@ class Time(tk.Label):
         
 
 class TimeBar(ctk.CTkFrame):
-    def __init__(self, master, timebar_details: dict, COL_THEME):
+    def __init__(self, master, timebar_details: dict, COL_THEME, map_widget):
         self.register(timebar_details)
+        self.details = timebar_details
+        self.map_widget = map_widget
 
         super().__init__(master, height = 50, corner_radius = 20, bg_color = COL_THEME["bg_col"], fg_color = COL_THEME["fg_col"])
 
         self.timezone = timebar_details["timezone"]
-        self.details = timebar_details
 
         time_Label = Time(self, self.timezone, COL_THEME)
         time_Label.place(x = 10, y = 25, anchor = tk.W)
@@ -37,7 +39,7 @@ class TimeBar(ctk.CTkFrame):
 
         #will only be viable for TimeBar.place(relx = 0.5, rely = 0.5, width = 600, anchor = tk.CENTER) in WorldClockApp
         deleteimg_image = ctk.CTkImage(light_image = Image.open(".\\images\\delete.png"), dark_image = Image.open("C:\\Users\\pc\\Desktop\\Python-World-Clock\\images\\delete.png"), size = (20, 20))
-        delete_Button = ctk.CTkButton(self, image = deleteimg_image, text = "", corner_radius = 10, height = 20, width = 20, command = lambda: master.updateClocksFrame(list(timebar_details.values()), COL_THEME))
+        delete_Button = ctk.CTkButton(self, image = deleteimg_image, text = "", corner_radius = 10, height = 20, width = 20, command = lambda: master.updateClocksFrame(list(timebar_details.values()), COL_THEME, map_widget))
         delete_Button.place(x = 590, y = 25, anchor = tk.E)
 
     def append(self):
@@ -66,3 +68,9 @@ class TimeBar(ctk.CTkFrame):
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(list(timebar_details.values()))
 
+    def mark(self):      
+        def get_random_color():
+            r = lambda: random.randint(0, 255)
+            return ("#%02X%02X%02X" % (r(), r(), r()))
+
+        self.marker = self.map_widget.set_marker(self.details["lat"], self.details["long"], marker_color_circle = get_random_color(), marker_color_outside = get_random_color())

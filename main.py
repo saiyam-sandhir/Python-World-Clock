@@ -21,7 +21,7 @@ class WorldClockApp(tix.Tk):
         map_frame = mapv.MapFrame(self, COL_THEME)
         map_frame.pack(fill = tk.BOTH, expand = 1, pady = 0)
 
-        clocks_frame = clocksv.ClocksFrame(self, COL_THEME)
+        clocks_frame = clocksv.ClocksFrame(self, COL_THEME, map_frame.map_widget)
         clocks_frame.pack(fill = tk.BOTH, expand = 1)
         
         self.mainloop()
