@@ -20,9 +20,13 @@ class Time(tk.Label):
         self.thread = threading.Thread(target = self.update_timebar, args = (time_zone,))
 
     def update_timebar(self, time_zone):
-        while(self.start_clock):
-            self.configure(text = datetime.now(pytz.timezone(time_zone)).strftime("%H:%M:%S"))
-            time.sleep(0.1)
+        #Try an except to stop the return of runtime error on closing the main window
+        try:
+            while(self.start_clock):
+                self.configure(text = datetime.now(pytz.timezone(time_zone)).strftime("%H:%M:%S"))
+                time.sleep(0.1)
+        except RuntimeError:
+            pass
 
     def stop_clock(self):
         self.start_clock = False
