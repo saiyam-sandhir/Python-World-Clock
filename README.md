@@ -44,7 +44,7 @@
 
 - Clone the repository or download the zip file.
 - Navigate to the project directory in termial/command prompt.
-- Run the command '<code>python main.py</code>'.
+- Run the command <code>python main.py</code>.
 - The user can also simply run the 'main.py' file using any IDE of choice.
 
 </br>
