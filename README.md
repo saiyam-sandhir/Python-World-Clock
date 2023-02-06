@@ -16,7 +16,7 @@
 - User-friendly interface with a graphical display.
 - Contains an integrated map that marks the location of the created clocks/time bars.
 - User can easily zoom into the location of a clock using the "Locate" button in the clock/time bar.
--more
+- more
 
 </br>
 
