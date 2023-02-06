@@ -2,6 +2,8 @@ import customtkinter as ctk
 import tkinter as tk
 from tkinter import tix
 from datetime import datetime
+import time
+import threading
 import pytz
 from PIL import Image
 import csv
@@ -12,7 +14,18 @@ import os
 class Time(tk.Label):
     def __init__(self, master, time_zone: str, COL_THEME):
         super().__init__(master, text = datetime.now(pytz.timezone(time_zone)).strftime("%H:%M:%S"), bg = COL_THEME["fg_col"], fg = COL_THEME["txt_col"], font = ("Arial", 20, "bold"))
-        
+        self.start_clock = True
+        self.thread = threading.Thread(target = self.update_timebar, args = (time_zone,))
+
+    def update_timebar(self, time_zone):
+        while(self.start_clock):
+            self.configure(text = datetime.now(pytz.timezone(time_zone)).strftime("%H:%M:%S"))
+            time.sleep(0.1)
+
+    def stop_clock(self):
+        self.start_clock = False
+        self.thread.join()
+
 
 class TimeBar(ctk.CTkFrame):
     def __init__(self, master, timebar_details: dict, COL_THEME, map_widget):
@@ -24,8 +37,9 @@ class TimeBar(ctk.CTkFrame):
 
         self.timezone = timebar_details["timezone"]
 
-        time_Label = Time(self, self.timezone, COL_THEME)
-        time_Label.place(x = 10, y = 25, anchor = tk.W)
+        self.time_Label = Time(self, self.timezone, COL_THEME)
+        self.time_Label.place(x = 10, y = 25, anchor = tk.W)
+        self.time_Label.thread.start()
 
         coordinates_balloon = tix.Balloon(master)
 
@@ -42,7 +56,7 @@ class TimeBar(ctk.CTkFrame):
         locator_Button.place(x = 540, y = 25, anchor = tk.E)
 
         deleteimg_image = ctk.CTkImage(light_image = Image.open(".\\images\\delete.png"), dark_image = Image.open(".\\images\\delete.png"), size = (20, 20))
-        delete_Button = ctk.CTkButton(self, image = deleteimg_image, text = "", corner_radius = 10, height = 20, width = 20, command = lambda: master.updateClocksFrame(list(timebar_details.values()), COL_THEME, map_widget))
+        delete_Button = ctk.CTkButton(self, image = deleteimg_image, text = "", corner_radius = 10, height = 20, width = 20, command = lambda: [master.updateClocksFrame(list(timebar_details.values()), COL_THEME, map_widget), self.time_Label.stop_clock()])
         delete_Button.place(x = 590, y = 25, anchor = tk.E)
 
     def append(self):

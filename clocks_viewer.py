@@ -141,7 +141,8 @@ class ClocksFrame(tk.Frame):
             for i in self.winfo_children()[1:]:
                 if type(i) == clock.TimeBar:
                     i.marker.delete()
-                i.destroy()
+                    i.time_Label.stop_clock()
+                    i.destroy()
 
             deleted_timebar_index = df.index[df.apply(tuple, axis=1) == tuple(deleted_timebar_details)].tolist()
             df = df.drop(deleted_timebar_index)
