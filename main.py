@@ -1,3 +1,5 @@
+# Copyright (c) 2023 Saiyam Jain
+
 import tkinter as tk
 from tkinter import tix
 import configparser
