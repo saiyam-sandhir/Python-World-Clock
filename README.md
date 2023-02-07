@@ -8,7 +8,17 @@
 
 </br>
 
-<h3>Features</h3>
+<h2>Preview</h2>
+
+![1](https://user-images.githubusercontent.com/86138251/217144504-0517b7ef-0abc-4128-a83d-e5ab78fb5b1d.png)
+![2](https://user-images.githubusercontent.com/86138251/217144525-12b9cbd4-441f-48e3-bc09-50b877747c1b.png)
+![3](https://user-images.githubusercontent.com/86138251/217144543-3c171362-1a25-4b66-afac-6fd3ee966ed7.png)   ![4](https://user-images.githubusercontent.com/86138251/217144562-9f3edaeb-c6b0-462c-ac0a-e6df47786f27.png)
+![5](https://user-images.githubusercontent.com/86138251/217144573-e39f26c1-c593-4f03-baad-0654895f4dfe.png)
+
+
+</br>
+
+<h2>Features</h2>
 
 - Ability to  create a clock for any location given its timezone or coordinates.
 - Shows the current time for any location given its timezone is selected or its coordinates are entered.
@@ -20,7 +30,7 @@
 
 </br>
 
-<h3 id = "Requirements">Requirements</h3>
+<h2 id = "Requirements">Requirements</h2>
 
 - Python 3.x
 - tkinter
@@ -41,7 +51,7 @@
 
 </br>
 
-<h3>Installation & Usage</h3>
+<h2>Installation & Usage</h2>
 
 - Clone the repository or download the zip file.
 - Navigate to the project directory in termial/command prompt.
@@ -50,19 +60,19 @@
 
 </br>
 
-<h3>Acknowledgement</h3>
+<h2>Acknowledgement</h2>
 
 - This software uses images downloaded from '<a href = "https://www.flaticon.com">flaticon.com</a>'.
 - This software took color theme idea from '<a href = "https://colorhunt.co/">colorhunt.co</a>'.
 
 </br>
 
-<h3>Contribution</h3>
+<h2>Contribution</h2>
 
 <p>Your contributions and suggestions are always welcome. For bugs and feature requests, please create an issue.</p>
 
 </br>
 
-<h3>License</h3>
+<h2>License</h2>
 
 This software is licensed under the <a href = "https://github.com/saiyam-sandhir/Python-World-Clock/blob/master/LICENSE">MIT License</a>.
